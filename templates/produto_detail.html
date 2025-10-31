@@ -1,0 +1,208 @@
+{% extends 'base.html' %}
+
+{% block title %}Detalhes do Produto: {{ produto.nome }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="hero-section">
+        <h1><i class="fas fa-info-circle"></i> Detalhes do Produto</h1>
+        <p>Informações completas sobre o produto selecionado</p>
+    </div>
+    
+    <div class="product-detail-container">
+        <div class="product-detail-card">
+            <div class="product-detail-content">
+                <div class="product-image-section">
+                    {% if produto.imagem %}
+                        <img src="{{ produto.imagem.url }}" class="product-detail-image" alt="{{ produto.nome }}">
+                    {% else %}
+                        <div class="no-image-placeholder">
+                            <i class="fas fa-image"></i>
+                            <span>Sem Imagem</span>
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <div class="product-info-section">
+                    <h2 class="product-title">{{ produto.nome }}</h2>
+                    
+                    <div class="product-price">
+                        <span class="price-label">Preço:</span>
+                        <span class="price-value">R$ {{ produto.preco }}</span>
+                    </div>
+                    
+                    <div class="product-stock">
+                        <i class="fas fa-box"></i>
+                        <span>{{ produto.quantidade }} unidades em estoque</span>
+                    </div>
+                    
+                    <div class="product-status">
+                        {% if produto.disponivel and produto.quantidade > 0 %}
+                            <span class="badge bg-success">
+                                <i class="fas fa-check"></i> Disponível
+                            </span>
+                        {% else %}
+                            <span class="badge bg-danger">
+                                <i class="fas fa-times"></i> Indisponível
+                            </span>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="product-actions">
+                        {% if produto.disponivel and produto.quantidade > 0 %}
+                            <a href="{% url 'adicionar_ao_carrinho' produto.pk %}" class="btn btn-primary btn-large">
+                                <i class="fas fa-shopping-cart"></i> Adicionar ao Carrinho
+                            </a>
+                        {% else %}
+                            <button class="btn btn-secondary btn-large" disabled>
+                                <i class="fas fa-times"></i> Produto Indisponível
+                            </button>
+                        {% endif %}
+                        
+                        <a href="{% url 'lista_produtos' %}" class="btn btn-outline btn-large">
+                            <i class="fas fa-arrow-left"></i> Voltar aos Produtos
+                        </a>
+                    </div>
+                    
+                    {% if user.is_superuser %}
+                    <div class="admin-actions">
+                        <h4>Administração:</h4>
+                        <div class="admin-buttons">
+                            <a href="{% url 'admin:loja_produto_change' produto.pk %}" class="btn btn-sm" style="background: #17a2b8; color: white;">
+                                <i class="fas fa-edit"></i> Editar Produto
+                            </a>
+                            <a href="{% url 'excluir_produto' produto.pk %}" class="btn btn-sm" style="background: #dc3545; color: white;">
+                                <i class="fas fa-trash"></i> Excluir Produto
+                            </a>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.product-detail-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 2rem 0;
+}
+
+.product-detail-card {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.product-detail-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    padding: 2rem;
+}
+
+.product-image-section {
+    text-align: center;
+}
+
+.product-detail-image {
+    width: 100%;
+    max-width: 400px;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 15px;
+}
+
+.product-info-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.product-title {
+    font-size: 2rem;
+    color: #333;
+    margin: 0;
+}
+
+.product-price {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.price-label {
+    font-size: 1.2rem;
+    color: #666;
+}
+
+.price-value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #667eea;
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.product-stock {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #28a745;
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+.product-status {
+    margin: 1rem 0;
+}
+
+.product-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.btn-large {
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.admin-actions {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid #eee;
+}
+
+.admin-actions h4 {
+    color: #333;
+    margin-bottom: 1rem;
+}
+
+.admin-buttons {
+    display: flex;
+    gap: 1rem;
+}
+
+@media (max-width: 768px) {
+    .product-detail-content {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .product-actions {
+        flex-direction: column;
+    }
+    
+    .admin-buttons {
+        flex-direction: column;
+    }
+}
+</style>
+{% endblock %}

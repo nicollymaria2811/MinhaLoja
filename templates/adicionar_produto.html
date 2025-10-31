@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block title %}Adicionar Produto - Minha Loja{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="hero-section">
+        <h1><i class="fas fa-plus-circle"></i> Adicionar Novo Produto</h1>
+        <p>Preencha os dados abaixo para adicionar um novo produto à loja</p>
+    </div>
+    
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <h2><i class="fas fa-box"></i> Dados do Produto</h2>
+                <p>Informe os detalhes do produto que deseja adicionar</p>
+            </div>
+            
+            <form method="post" class="auth-form" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                <div class="form-group">
+                    <label for="id_nome">Nome do Produto:</label>
+                    <input type="text" name="nome" id="id_nome" class="form-control" required>
+                    {% if form.nome.errors %}
+                        <div class="field-errors">
+                            {% for error in form.nome.errors %}
+                                <span class="error">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="id_preco">Preço (R$):</label>
+                    <input type="number" name="preco" id="id_preco" class="form-control" step="0.01" min="0" required>
+                    {% if form.preco.errors %}
+                        <div class="field-errors">
+                            {% for error in form.preco.errors %}
+                                <span class="error">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="id_quantidade">Quantidade em Estoque:</label>
+                    <input type="number" name="quantidade" id="id_quantidade" class="form-control" min="0" required>
+                    {% if form.quantidade.errors %}
+                        <div class="field-errors">
+                            {% for error in form.quantidade.errors %}
+                                <span class="error">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="id_imagem">Imagem do Produto (opcional):</label>
+                    <input type="file" name="imagem" id="id_imagem" class="form-control" accept="image/*">
+                    {% if form.imagem.errors %}
+                        <div class="field-errors">
+                            {% for error in form.imagem.errors %}
+                                <span class="error">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-full">
+                    <i class="fas fa-plus"></i> Adicionar Produto
+                </button>
+            </form>
+            
+            <div class="auth-footer">
+                <p><a href="{% url 'lista_produtos' %}"><i class="fas fa-arrow-left"></i> Voltar para Produtos</a></p>
+                <p><a href="{% url 'admin:loja_produto_changelist' %}"><i class="fas fa-cog"></i> Admin Django</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+

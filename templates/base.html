@@ -1,0 +1,157 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Minha Loja - Produtos Incríveis{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'loja/style.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'lista_produtos' %}">
+                <i class="fas fa-store"></i> Minha Loja
+            </a>
+            <div class="menu">
+                <a href="{% url 'lista_produtos' %}">
+                    <i class="fas fa-home"></i> Início
+                </a>
+                <a href="{% url 'produtos_filtrados' %}">
+                    <i class="fas fa-search"></i> Pesquisar
+                </a>
+                <a href="{% url 'sobre' %}">
+                    <i class="fas fa-info-circle"></i> Sobre
+                </a>
+                <a href="{% url 'contato' %}">
+                    <i class="fas fa-envelope"></i> Contato
+                </a>
+                {% if user.is_authenticated %}
+                <a href="{% url 'ver_carrinho' %}" class="carrinho-link">
+                    <i class="fas fa-shopping-cart"></i> Carrinho 
+                    <span class="badge bg-danger">{{ carrinho|length }}</span>
+                </a>
+
+                <div class="user-dropdown">
+                    <button class="user-btn">
+                        <i class="fas fa-user"></i> 
+                        Olá, {{user.first_name|default:user.username }}
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="dropdown-menu">
+                        <form action="{% url 'minha_conta' %}" method="get">
+                            <button type="submit">
+                                <i class="fas fa-user-cog"></i> Minha Conta
+                            </button>
+                        </form>
+                        {% if user.is_superuser %}
+                        <a href="{% url 'adicionar_produto' %}">
+                            <i class="fas fa-plus-circle"></i> Adicionar Produto
+                        </a>
+                        <a href="{% url 'admin:loja_produto_changelist' %}">
+                            <i class="fas fa-cog"></i> Admin Django
+                        </a>
+                        <hr>
+                        {% endif %}
+                        <form action="{% url 'logout' %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit">
+                                <i class="fas fa-sign-out-alt"></i> Sair
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                {% else %}
+                <a href="{% url 'login' %}">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </a>
+                <a href="{% url 'registrar' %}">
+                    <i class="fas fa-user-plus"></i> Registrar
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+    <main>
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+            <div class="message {{ message.tags }}">
+                <i class="fas fa-{% if message.tags == 'success' %}check-circle{% elif message.tags == 'error' %}exclamation-circle{% else %}info-circle{% endif %}"></i>
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+       
+        {% block content %}
+        {% endblock %}   
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3><i class="fas fa-store"></i> Minha Loja</h3>
+                    <p>Encontre os melhores produtos com qualidade e preços incríveis!</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Links Rápidos</h4>
+                    <ul>
+                        <li><a href="{% url 'lista_produtos' %}">Produtos</a></li>
+                        <li><a href="{% url 'produtos_filtrados' %}">Pesquisar</a></li>
+                        <li><a href="#sobre">Sobre Nós</a></li>
+                        <li><a href="#contato">Contato</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contato</h4>
+                    <p><i class="fas fa-envelope"></i> contato@minhaloja.com</p>
+                    <p><i class="fas fa-phone"></i> (11) 99999-9999</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Minha Loja. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Função para adicionar produto ao carrinho
+        function addToCart(produtoId) {
+            // Aqui você pode implementar a lógica para adicionar ao carrinho
+            // Por enquanto, vamos apenas mostrar uma mensagem
+            alert('Produto adicionado ao carrinho! (Funcionalidade em desenvolvimento)');
+        }
+
+        // Animação suave para scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Efeito de parallax sutil no hero
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const hero = document.querySelector('.hero-section');
+            if (hero) {
+                hero.style.transform = `translateY(${scrolled * 0.5}px)`;
+            }
+        });
+    </script>
+</body>
+</html>

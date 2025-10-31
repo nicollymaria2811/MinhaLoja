@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}Produtos - Minha Loja{% endblock %}
+
+{% block content %}
+<div class="hero-section">
+    <div class="container">
+        <h1 class="hero-title">
+            <i class="fas fa-star"></i> Nossos Produtos
+        </h1>
+        <p class="hero-subtitle">
+            Descubra uma seleção incrível de produtos com qualidade excepcional e preços imbatíveis
+        </p>
+    </div>
+</div>
+
+<div class="container">
+    {% if produtos %}
+        <div class="products-header">
+            <h2>Catálogo de Produtos</h2>
+            <p>Encontre exatamente o que você procura</p>
+        </div>
+        
+        <div class="product-grid">
+            {% for produto in produtos %}
+            <div class="product-item">
+                {% include 'partials/_card_produto.html' %}
+            </div>
+            {% endfor %}
+        </div>
+        
+        <div class="products-footer">
+            <p><i class="fas fa-info-circle"></i> Mostrando {{ produtos|length }} produto{{ produtos|length|pluralize }}</p>
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <div class="empty-icon">
+                <i class="fas fa-box-open"></i>
+            </div>
+            <h3>Nenhum produto encontrado</h3>
+            <p>No momento não temos produtos disponíveis. Volte em breve para ver nossas novidades!</p>
+            <a href="{% url 'produtos_filtrados' %}" class="btn btn-primary">
+                <i class="fas fa-search"></i> Buscar Produtos
+            </a>
+        </div>
+    {% endif %}
+</div>
+
+{% endblock %}

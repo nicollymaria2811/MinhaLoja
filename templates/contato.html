@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}Contato - Minha Loja{% endblock %}
+
+{% block content %}
+<div class="hero-section">
+    <div class="container">
+        <h1 class="hero-title">
+            <i class="fas fa-envelope"></i> Contato
+        </h1>
+        <p class="hero-subtitle">
+            Entre em contato conosco. Estamos aqui para ajudar!
+        </p>
+    </div>
+</div>
+
+<div class="container">
+    <div class="contact-content">
+        <div class="contact-info">
+            <h2>Informações de Contato</h2>
+            <div class="contact-grid">
+                <div class="contact-item">
+                    <i class="fas fa-phone"></i>
+                    <h3>Telefone</h3>
+                    <p>(11) 99999-9999</p>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-envelope"></i>
+                    <h3>Email</h3>
+                    <p>contato@minhaloja.com</p>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <h3>Endereço</h3>
+                    <p>Rua das Flores, 123<br>São Paulo - SP</p>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-clock"></i>
+                    <h3>Horário</h3>
+                    <p>Seg - Sex: 9h às 18h<br>Sáb: 9h às 14h</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="contact-form-container">
+            <h2>Envie uma Mensagem</h2>
+            <form class="contact-form" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="nome">Nome:</label>
+                    <input type="text" id="nome" name="nome" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="assunto">Assunto:</label>
+                    <input type="text" id="assunto" name="assunto" required>
+                </div>
+                <div class="form-group">
+                    <label for="mensagem">Mensagem:</label>
+                    <textarea id="mensagem" name="mensagem" rows="5" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-paper-plane"></i> Enviar Mensagem
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+

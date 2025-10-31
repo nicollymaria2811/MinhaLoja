@@ -1,0 +1,10 @@
+{% extends "base.html" %} {% block title %}Compra realizada!{% endblock %} {%
+block content %}
+<div>
+  <div>
+    <h1>Compra realizada com sucesso!</h1>
+    <p>Em breve você receberá mais informaçoes</p>
+    <a href="{% url 'lista_produtos' %}">Voltar para loja</a>
+  </div>
+</div>
+{% endblock %}

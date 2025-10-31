@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+
+{% block title %}Carrinho de Compras - Minha Loja{% endblock %}
+
+{% block content %}
+<div class="cart-container">
+  <div class="cart-header">
+    <h1><i class="fas fa-shopping-cart"></i> Carrinho de Compras</h1>
+    <p class="cart-subtitle">Revise seus itens antes de finalizar a compra</p>
+  </div>
+
+  {% if carrinho|length > 0 %}
+  <div class="cart-content">
+    <div class="cart-table-container">
+      <table class="cart-table">
+        <thead>
+          <tr>
+            <th class="product-col">Produto</th>
+            <th class="quantity-col">Quantidade</th>
+            <th class="price-col">Preço Unitário</th>
+            <th class="total-col">Preço Total</th>
+            <th class="action-col">Ação</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in carrinho %} 
+          {% with produto=item.produto %}
+          <tr class="cart-item">
+            <td class="product-info">
+              <div class="product-image">
+                {% if produto.imagem %}
+                <img
+                  src="{{ produto.imagem.url }}"
+                  alt="{{ produto.nome }}"
+                  class="product-img"
+                />
+                {% else %}
+                <div class="no-image">
+                  <i class="fas fa-image"></i>
+                </div>
+                {% endif %}
+              </div>
+              <div class="product-details">
+                <h3 class="product-name">{{ produto.nome }}</h3>
+                <p class="product-stock">
+                  Estoque: {{ produto.quantidade }} unidades
+                </p>
+              </div>
+            </td>
+            <td class="quantity-cell">
+              <div class="quantity-controls">
+                <form
+                  method="post"
+                  action="{% url 'adicionar_ao_carrinho' produto.id %}"
+                  class="quantity-form"
+                >
+                  {% csrf_token %}
+                  <input type="hidden" name="update_quantidade" value="true" />
+                  <button
+                    type="submit"
+                    name="quantidade"
+                    value="{{ item.quantidade|add:'-1' }}"
+                    class="qty-btn minus"
+                  >
+                    <i class="fas fa-minus"></i>
+                  </button>
+                  <span class="quantity">{{ item.quantidade }}</span>
+                  <button
+                    type="submit"
+                    name="quantidade"
+                    value="{{ item.quantidade|add:'1' }}"
+                    class="qty-btn plus"
+                  >
+                    <i class="fas fa-plus"></i>
+                  </button>
+                </form>
+              </div>
+            </td>
+            <td class="price-cell">
+              <span class="unit-price">R$ {{ item.preco|floatformat:2 }}</span>
+            </td>
+            <td class="total-cell">
+              <span class="item-total">R$ {{ item.preco_total|floatformat:2 }}</span>
+            </td>
+            <td class="action-cell">
+              <a
+                href="{% url 'remover_do_carrinho' produto.id %}"
+                class="remove-btn"
+                onclick="return confirm('Tem certeza que deseja remover este item?')"
+              >
+                <i class="fas fa-trash"></i>
+                Remover
+              </a>
+            </td>
+          </tr>
+          {% endwith %} 
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="cart-summary">
+      <div class="summary-card">
+        <h3>Resumo do Pedido</h3>
+        <div class="summary-row">
+          <span>Subtotal:</span>
+          <span>R$ {{ carrinho.get_total_preco|floatformat:2 }}</span>
+        </div>
+        <div class="summary-row">
+          <span>Frete:</span>
+          <span>Grátis</span>
+        </div>
+        <hr />
+        <div class="summary-row total-row">
+          <span><strong>Total:</strong></span>
+          <span><strong>R$ {{ carrinho.get_total_preco|floatformat:2 }}</strong></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cart-actions">
+    <a href="{% url 'lista_produtos' %}" class="btn btn-secondary">
+      <i class="fas fa-arrow-left"></i> Continuar Comprando
+    </a>
+    <a href="{% url 'checkout' %}" class="btn btn-primary">
+      <i class="fas fa-credit-card"></i> Finalizar Compra
+    </a>
+  </div>
+  {% else %}
+  <div class="empty-cart">
+    <div class="empty-cart-icon">
+      <i class="fas fa-shopping-cart"></i>
+    </div>
+    <h2>Seu carrinho está vazio</h2>
+    <p>Que tal adicionar alguns produtos incríveis?</p>
+    <a href="{% url 'lista_produtos' %}" class="btn btn-primary">
+      <i class="fas fa-shopping-bag"></i> Ver Produtos
+    </a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

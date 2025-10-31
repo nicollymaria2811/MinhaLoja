@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block title %}Pesquisar Produtos - Minha Loja{% endblock %}
+
+{% block content %}
+<div class="hero-section">
+    <div class="container">
+        <h1 class="hero-title">
+            <i class="fas fa-search"></i> Pesquisar Produtos
+        </h1>
+        <p class="hero-subtitle">
+            Encontre exatamente o que você procura com nossos filtros avançados
+        </p>
+    </div>
+</div>
+
+<div class="container">
+    <div class="search-container">
+        <div class="search-form-card">
+            <h2><i class="fas fa-filter"></i> Filtros de Pesquisa</h2>
+            <form method="get" class="search-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="id_nome">Nome do Produto:</label>
+                        <input type="text" name="nome" id="id_nome" class="form-control" placeholder="Digite o nome do produto..." value="{{ filter.form.nome.value|default:'' }}">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="id_preco">Faixa de Preço:</label>
+                        <input type="text" name="preco" id="id_preco" class="form-control" placeholder="Ex: 10.00,20.00" value="{{ filter.form.preco.value|default:'' }}">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="id_disponivel">Disponibilidade:</label>
+                        <select name="disponivel" id="id_disponivel" class="form-control">
+                            <option value="">Todos</option>
+                            <option value="true" {% if filter.form.disponivel.value == 'true' %}selected{% endif %}>Disponível</option>
+                            <option value="false" {% if filter.form.disponivel.value == 'false' %}selected{% endif %}>Indisponível</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-search"></i> Filtrar
+                        </button>
+                        <a href="{% url 'produtos_filtrados' %}" class="btn btn-secondary">
+                            <i class="fas fa-times"></i> Limpar
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="results-section">
+            <h2><i class="fas fa-list"></i> Resultados da Pesquisa</h2>
+            
+            {% if filter.qs %}
+                <div class="product-grid">
+                    {% for produto in filter.qs %}
+                    <div class="product-item">
+                        {% include 'partials/_card_produto.html' %}    
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <div class="empty-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h3>Nenhum produto encontrado</h3>
+                    <p>Tente ajustar os filtros de pesquisa ou limpar todos os filtros para ver todos os produtos.</p>
+                    <a href="{% url 'lista_produtos' %}" class="btn btn-primary">
+                        <i class="fas fa-home"></i> Ver Todos os Produtos
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

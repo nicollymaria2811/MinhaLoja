@@ -1,0 +1,104 @@
+<!-- Template atualizado em {{ "now"|date:"Y-m-d H:i:s" }} - VERSÃO 3.0 -->
+<div class="card">
+  <div class="card-image-container">
+    {% if produto.imagem %}
+    <img
+      src="{{ produto.imagem.url }}"
+      class="card-img-top"
+      alt="{{ produto.nome }}"
+    />
+    {% else %}
+    <div class="no-image-placeholder">
+      <i class="fas fa-image"></i>
+      <span>Sem Imagem</span>
+    </div>
+    {% endif %}
+    <div class="card-overlay">
+      <div class="card-actions">
+        <a href="{% url 'produto_detail' produto.pk %}" class="btn btn-primary">
+          <i class="fas fa-eye"></i> Ver Detalhes
+        </a>
+      </div>
+    </div>
+    <div class="card-status">
+      <span
+        class="badge {% if produto.disponivel and produto.quantidade > 0 %} bg-success {% else %} bg-danger {% endif %}"
+      >
+        {% if produto.disponivel and produto.quantidade > 0 %}
+        <i class="fas fa-check"></i> Disponível {% else %}
+        <i class="fas fa-times"></i> Indisponível {% endif %}
+      </span>
+    </div>
+  </div>
+
+  <div class="card-body">
+    <h5 class="card-title">{{ produto.nome }}</h5>
+    <div class="card-price">
+      <span class="price-label">A partir de</span>
+      <span class="price-value">R$ {{ produto.preco }}</span>
+    </div>
+
+    {% if produto.quantidade > 0 %}
+    <div class="card-stock">
+      <i class="fas fa-box"></i>
+      <span>{{ produto.quantidade }} em estoque</span>
+    </div>
+    {% endif %}
+
+    <div class="card-footer-actions">
+      <a href="{% url 'produto_detail' produto.pk %}" class="btn btn-outline">
+        <i class="fas fa-info-circle"></i> Mais Info
+      </a>
+      {% if produto.disponivel and produto.quantidade > 0 %}
+      <a href="/adicionar/{{produto.pk}}/" class="btn btn-primary btn-large">
+        <i class="fas fa-shopping-cart"></i> Adicionar ao Carrinho
+      </a>
+      {% else %}
+      <button class="btn btn-secondary" disabled>
+        <i class="fas fa-times"></i> Indisponível
+      </button>
+      {% endif %}
+
+      <!-- Botões de admin (apenas para superusuários) - v2.0 -->
+      {% if user.is_superuser %}
+      <div
+        style="margin-top: 10px; padding-top: 10px; border-top: 1px solid #eee"
+      >
+        <div style="display: flex; gap: 5px">
+          <a
+            href="/editar-produto/{{ produto.pk }}/"
+            class="btn btn-sm"
+            style="
+              background: #17a2b8;
+              color: white;
+              flex: 1;
+              font-size: 0.8rem;
+              text-decoration: none;
+              text-align: center;
+            "
+            title="Editar produto"
+            onclick="console.log('Clicou em editar produto {{ produto.pk }} - URL: /editar-produto/{{ produto.pk }}/')"
+          >
+            <i class="fas fa-edit"></i> Editar
+          </a>
+          <a
+            href="{% url 'excluir_produto' produto.pk %}"
+            class="btn btn-sm"
+            style="
+              background: #dc3545;
+              color: white;
+              flex: 1;
+              font-size: 0.8rem;
+              text-decoration: none;
+              text-align: center;
+            "
+            title="Excluir produto"
+          >
+            <i class="fas fa-trash"></i> Excluir
+          </a>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>

@@ -17,6 +17,9 @@ path = '/home/nicollymaria/MinhaLoja'
 if path not in sys.path:
     sys.path.append(path)
 
+# Indica onde estão as configurações do Django
+os.environ['DJANGO_SETTINGS_MODULE'] = 'core.settings'
+
 # Define primeiro o BASE_DIR
 BASE_DIR = Path(__file__).resolve().parent.parent
 

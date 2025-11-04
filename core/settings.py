@@ -13,6 +13,10 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 from pathlib import Path
 import os
 
+path = '/home/nicollymaria/MinhaLoja'
+if path not in sys.path:
+    sys.path.append(path)
+
 # Define primeiro o BASE_DIR
 BASE_DIR = Path(__file__).resolve().parent.parent
 
